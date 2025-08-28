@@ -1,7 +1,8 @@
 @extends('layouts.main')
 
-<title>User's | SMB Claims</title>
+<title>User's | SMB Ticket</title>
 
+@include('includes.style')
 
 @section('content')
     <div class="pc-content">
@@ -9,7 +10,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <table id="dom-jqry" class="table table-striped" style="width:100%">
+                        
+                        <table id="dom-jqry" class="table table-striped table-inverse table-responsive" style="width:100%">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -31,8 +33,7 @@
                                         <td>
                                             @if ($item->roles->isNotEmpty())
                                                 @foreach ($item->roles as $role)
-                                                    <span class="badge bg-primary">
-                                                        <i class="fa fa-user-cog"></i>
+                                                    <span class="mdi mdi-account badge bg-primary text-white">
                                                         {{ $role->name }}
                                                         @if (!$loop->last)
                                                             ,
@@ -45,8 +46,7 @@
                                         </td>
                                         <td>
                                             @if ($item->groupuser)
-                                                <span class="badge bg-secondary">
-                                                    <i class="fa fa-user-circle"></i>
+                                                <span class="mdi mdi-account badge bg-primary text-white">
                                                     {{ $item->groupuser->division->name }}
                                                 </span>
                                             @else
@@ -56,8 +56,7 @@
                                         <td>
 
                                             @if ($item->groupuser)
-                                                <span class="badge {{ $item->groupuser->group->colors }}">
-                                                    <i class="fa fa-check-circle"></i>
+                                                <span class="mdi mdi-account badge {{ $item->groupuser->group->colors }} text-white">
                                                     {{ $item->groupuser->group->name }}
                                                 </span>
                                             @else
@@ -74,7 +73,8 @@
                                                 data-roles="{{ $item->roles->pluck('id') }}"
                                                 data-division="{{ $item->groupuser?->division_id ?? '' }}"
                                                 data-group="{{ $item->groupuser?->group_id ?? '' }}">
-                                                <i class="fa fa-pen"></i>
+                                                <span class="mdi mdi-square-edit-outline"></span>
+                                                Edit
                                             </button>
 
 
@@ -161,6 +161,7 @@
         </div>
     </div>
 
+    @include('includes.script')
 
     <script>
         $(document).ready(function() {
@@ -209,7 +210,7 @@
             });
 
             let userId;
-            // 
+
             $(".btn-edit").click(function() {
                 userId = $(this).data("id");
                 let name = $(this).data("name");
@@ -230,8 +231,6 @@
                     userId));
                 $("#editUsers").modal("show");
             });
-
-
 
             $("#saveUserChanges").click(function() {
                 let name = $("#editUsers #name").val();
