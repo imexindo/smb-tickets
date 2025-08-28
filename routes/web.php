@@ -36,7 +36,7 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
     Route::prefix('master')->group(function () {
 
         Route::middleware(['permission:master_categories_access'])->group(function () {
-            Route::get('/categories', [CategoriesController::class, 'index'])->name('master.categories.index');
+            // Route::get('/categories', [CategoriesController::class, 'index'])->name('master.categories.index');
         });
     });
 

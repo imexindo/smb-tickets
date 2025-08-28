@@ -2,7 +2,13 @@
 
 <title>User's | SMB Claims</title>
 
+@include('includes.dt-css')
 
+<style>
+    table {
+        font-size: 15px;
+    }
+</style>
 @section('content')
     <div class="pc-content">
         <div class="row">
@@ -161,6 +167,7 @@
         </div>
     </div>
 
+    @include('includes.dt')
 
     <script>
         $(document).ready(function() {
@@ -207,7 +214,6 @@
                     }
                 ]
             });
-
             let userId;
             // 
             $(".btn-edit").click(function() {
