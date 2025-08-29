@@ -22,6 +22,16 @@ class UserController extends Controller
         return view('pages.users.index', compact('users', 'roles', 'groups', 'divisions'));
     }
 
+
+    public function edit($id) {
+
+        $users = User::with(['groupuser'])
+            ->orderBy('created_at', 'desc')
+            ->find($id);
+
+        return response()->json($users);
+    }
+
     public function update(Request $request, User $user)
     {
 

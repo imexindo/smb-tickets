@@ -43,6 +43,7 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['permission:users_access'])->prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/update/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });

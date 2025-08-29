@@ -1,19 +1,28 @@
-<!-- plugins:js -->
-<script src="{{ asset('majestic/vendors/base/vendor.bundle.base.js') }}"></script>
-<!-- endinject -->
-<!-- Plugin js for this page-->
-<script src="{{ asset('majestic/vendors/chart.js/Chart.min.js') }}"></script>
-{{-- <script src="{{ asset('majestic/vendors/datatables.net/jquery.dataTables.js') }}"></script> --}}
-{{-- <script src="{{ asset('majestic/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script> --}}
-<!-- End plugin js for this page-->
-<!-- inject:js -->
-<script src="{{ asset('majestic/js/off-canvas.js') }}"></script>
-<script src="{{ asset('majestic/js/hoverable-collapse.js') }}"></script>
-<script src="{{ asset('majestic/js/template.js') }}"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="{{ asset('majestic/js/dashboard.js') }}"></script>
-<!-- End custom js for this page-->
-<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/js/dataTables.bootstrap5.min.js') }}"></script>
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script src="{{ asset('sneat/assets/vendor/libs/jquery/jquery.js') }}"></script>
+<script src="{{ asset('sneat/assets/vendor/libs/popper/popper.js') }}"></script>
+<script src="{{ asset('sneat/assets/vendor/js/bootstrap.js') }}"></script>
+<script src="{{ asset('sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+
+<script src="{{ asset('sneat/assets/vendor/js/menu.js') }}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script src="{{ asset('sneat/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+
+<!-- Main JS -->
+<script src="{{ asset('sneat/assets/js/main.js') }}"></script>
+
+<!-- Page JS -->
+<script src="{{ asset('sneat/assets/js/dashboards-analytics.js') }}"></script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- SweetAlert (opsional, buat delete confirmasi) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
