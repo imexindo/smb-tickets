@@ -27,3 +27,11 @@
 <!-- Helpers -->
 <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
+
+
+
+<style>
+  table {
+      font-size: 14px;
+  }
+</style>

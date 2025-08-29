@@ -4,12 +4,6 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
-<style>
-    table {
-        font-size: 14px;
-    }
-</style>
 @section('content')
     <div class="card">
         <div class="card-body">
