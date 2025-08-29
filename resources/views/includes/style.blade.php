@@ -10,6 +10,7 @@
 />
 
 <!-- Icons. Uncomment required icon fonts -->
+<link rel="stylesheet" href="{{ asset('sneat/assets/vendor/fonts/boxicons.css') }}" />
 <link rel="stylesheet" href="{{ asset('sneat/assets/css/fonts/fontawesome.css') }}">
 
 <!-- Core CSS -->
@@ -27,11 +28,3 @@
 <!-- Helpers -->
 <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
-
-
-
-<style>
-  table {
-      font-size: 14px;
-  }
-</style>
