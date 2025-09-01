@@ -1,29 +1,27 @@
 @extends('layouts.main')
 
-<title>Roles | SMB Claims</title>
-
+<title>Departments | SMB Claims</title>
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Roles</h5>
+            <h5 class="card-title">Departments</h5>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <form action="{{ route('roles.store') }}" method="POST">
+                    <form action="{{ route('departements.store') }}" method="POST">
                         <div class="row">
                             <div class="col-md-4">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Role Name</label>
                                     <input type="text" name="name" class="form-control" required
-                                        placeholder="Input Role name">
+                                        placeholder="Input Department name">
                                 </div>
                             </div>
-                            <div class="col-6 mt-4">
+                            <div class="col-6">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-plus-circle"></i> Create Role
+                                    <i class="fa fa-plus-circle"></i> Create Department
                                 </button>
                             </div>
                         </div>
@@ -32,37 +30,38 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Role Name</th>
+                                <th>Departments Name</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($roles as $role)
+                            @foreach ($dprt as $department)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <span class="badge bg-primary">
                                             <i class="fa fa-cog"></i>
-                                            {{ $role->name }}
+                                            {{ $department->name }}
                                         </span>
                                     </td>
-                                    <td>{{ $role->created_at }}</td>
+                                    <td>{{ $department->created_at }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-success text-white edit-role-btn py-2"
-                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}"
+                                        <button class="btn btn-sm btn-success text-white edit-department-btn py-2"
+                                            data-id="{{ $department->id }}" data-name="{{ $department->name }}"
                                             data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <i class="fa fa-pen"></i>
                                         </button>
 
-                                        {{-- <button class="btn btn-sm btn-danger text-white delete-role py-2"
-                                            data-id="{{ $role->id }}">
+                                        <button class="btn btn-sm btn-danger text-white delete-department py-2"
+                                            data-id="{{ $department->id }}">
                                             <i class="fa fa-trash"></i>
-                                        </button> --}}
+                                        </button>
 
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>
@@ -70,86 +69,59 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Role</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="role">Role Name</label>
-                                <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Role Name">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label for="permissions">Permissions</label>
-                            <div id="permission-list">
-                                @foreach ($permissions as $permission)
-                                    <div class="form-check form-check-inline my-2">
-                                        <input class="form-check-input permission-checkbox" type="checkbox"
-                                            name="permissions[]" value="{{ $permission->id }}">
-                                        <label class="form-check-label">{{ $permission->name }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
+                <form id="editDepartmentForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <input type="hidden" id="department_id">
+                        <div class="form-group">
+                            <label for="name">Department Name</label>
+                            <input type="text" class="form-control" name="name" id="department_name" required>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveRole">Save changes</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveDepartment">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
 
     <script>
         $(document).ready(function() {
             var table = $('#dom-jqry').DataTable();
 
-            $(document).on('click', '.edit-role-btn', function(e) {
+            // Tampilkan data di modal saat tombol edit diklik
+            $(document).on('click', '.edit-department-btn', function(e) {
                 let id = $(this).data('id');
                 let name = $(this).data('name');
 
-                $('#name').val(name);
-                $('#saveRole').data('id', id);
-
-                $.ajax({
-                    url: `/admin/roles/${id}/permissions`,
-                    type: 'GET',
-                    success: function(response) {
-                        $('.permission-checkbox').prop('checked',
-                            false); // Reset all checkboxes
-                        response.permissions.forEach(function(permId) {
-                            $('.permission-checkbox[value="' + permId + '"]').prop(
-                                'checked', true);
-                        });
-                    }
-                });
+                $('#department_id').val(id);
+                $('#department_name').val(name);
             });
 
-            // Handle Save Edit Role
-            $('#saveRole').on('click', function() {
-                let id = $(this).data('id');
-                let name = $('#name').val();
-                let permissions = $('.permission-checkbox:checked').map(function() {
-                    return $(this).val();
-                }).get();
+            // Handle update permission
+            $('#editDepartmentForm').on('submit', function(e) {
+                e.preventDefault();
+
+                let id = $('#department_id').val();
+                let name = $('#permission_name').val();
 
                 $.ajax({
-                    url: `/admin/roles/update/${id}`,
-                    type: 'POST',
+                    url: `/admin/departements/update/${id}`,
+                    type: 'PUT',
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        _method: 'PUT',
-                        name: name,
-                        permissions: permissions
+                        _token: "{{ csrf_token() }}",
+                        name: name
                     },
                     success: function(response) {
                         $('#exampleModal').modal('hide');
@@ -168,7 +140,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops!',
-                            text: 'Failed to update role!',
+                            text: 'Failed to update departements!',
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
@@ -178,33 +150,33 @@
                 });
             });
 
-            // Handle delete role
-            $(document).on('click', '.delete-role', function(e) {
+            $(document).on('click', '.delete-department', function(e) {
+                e.preventDefault();
                 let id = $(this).data('id');
 
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You won\'t be able to revert this!',
-                    icon: 'warning',
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: `/admin/roles/destroy/${id}`, // Ubah ke route yang sesuai
-                            type: 'DELETE',
+                            url: `/admin/departements/destroy/${id}`,
+                            type: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}"
                             },
                             success: function(response) {
                                 Swal.fire({
-                                    icon: 'success',
-                                    title: 'Deleted!',
+                                    icon: "success",
+                                    title: "Deleted!",
                                     text: response.success,
                                     toast: true,
-                                    position: 'top-end',
+                                    position: "top-end",
                                     showConfirmButton: false,
                                     timer: 2000
                                 });
@@ -212,11 +184,11 @@
                             },
                             error: function() {
                                 Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops!',
-                                    text: 'Failed to delete role!',
+                                    icon: "error",
+                                    title: "Oops!",
+                                    text: "Failed to delete department!",
                                     toast: true,
-                                    position: 'top-end',
+                                    position: "top-end",
                                     showConfirmButton: false,
                                     timer: 2000
                                 });
@@ -225,6 +197,7 @@
                     }
                 });
             });
+
         });
     </script>
 @endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
@@ -53,6 +54,13 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
         Route::post('/store', [GroupController::class, 'store'])->name('groups.store');
         Route::put('/update/{group}', [GroupController::class, 'update'])->name('groups.update');
         Route::delete('/destroy/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
+    });
+
+    Route::middleware(['permission:departments_access'])->prefix('departements')->group(function () {
+        Route::get('/', [DepartementController::class, 'index'])->name('departements.index');
+        Route::post('/store', [DepartementController::class, 'store'])->name('departements.store');
+        Route::put('/update/{group}', [DepartementController::class, 'update'])->name('departements.update');
+        Route::delete('/destroy/{id}', [DepartementController::class, 'destroy'])->name('departements.destroy');
     });
 
     Route::middleware(['permission:roles_access'])->prefix('roles')->group(function () {

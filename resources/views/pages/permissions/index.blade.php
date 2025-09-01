@@ -102,7 +102,7 @@
             var table = $('#dom-jqry').DataTable();
 
             // Tampilkan data di modal saat tombol edit diklik
-            $('.edit-permission-btn').on('click', function() {
+            $(document).on('click', '.edit-permission-btn', function(e) {
                 let id = $(this).data('id');
                 let name = $(this).data('name');
 
@@ -151,7 +151,7 @@
                 });
             });
 
-            $('.delete-permission').on('click', function(e) {
+            $(document).on('click', '.delete-permission', function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
 

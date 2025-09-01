@@ -112,7 +112,7 @@
                                         placeholder="Email">
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-4 mt-3">
                                 <div class="form-group">
                                     <label for="roles">Role</label>
                                     <select class="form-control" name="roles[]" id="roles">
@@ -123,7 +123,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-4 mt-3">
                                 <div class="form-group">
                                     <label for="division">Division</label>
                                     <select class="form-control" name="division" id="division">
@@ -134,7 +134,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-4 mt-3">
                                 <div class="form-group">
                                     <label for="group">Group</label>
                                     <select class="form-control" name="group" id="group">

@@ -9,7 +9,7 @@ class Devision extends Model
 {
     use HasFactory;
     
-    protected $table = 'divisions';
+    protected $table = 'departements';
 
     protected $fillable = ['name'];
 }
