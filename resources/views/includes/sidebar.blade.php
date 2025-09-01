@@ -1,3 +1,4 @@
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="/admin/dashboard" class="app-brand-link">
@@ -20,9 +21,12 @@
             <span class="menu-header-text">Pages</span>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
-                <div data-i18n="Analytics"><i class="fa fa-home"></i> Dashboard</div>
+                <div data-i18n="Analytics">
+                  <i class="fa fa-home" style="padding-right: 10px"></i> 
+                  Dashboard
+                </div>
             </a>
         </li>
 

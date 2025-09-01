@@ -41,6 +41,9 @@
       table {
         font-size: 14px !important;
       }
+      .menu-item {
+        margin-bottom: 5px !important;
+      }
     </style>
     
   </head>

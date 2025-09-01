@@ -21,8 +21,8 @@
                                 <th>NIK</th>
                                 <th>Name</th>
                                 <th>PT</th>
-                                <th>Department</th>
                                 <th>Roles</th>
+                                <th>Department</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>
@@ -39,15 +39,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-primary">
+                                        <span class="badge bg-warning">
                                             <i class="fa fa-building"></i>
                                             {{ $item->pt ? $item->pt->name : '-' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-secondary">
-                                            <i class="fa fa-user-circle"></i>
-                                            {{ $item->user ? $item->user->groupuser->department->name : '-' }}
                                         </span>
                                     </td>
                                     <td>
@@ -62,16 +56,18 @@
                                             -
                                         @endif
                                     </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            <i class="fa fa-user-circle"></i>
+                                            {{ $item->user ? $item->user->groupuser->department->name : '-' }}
+                                        </span>
+                                    </td>
+                                    
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-success text-white btn-edit py-2"
                                             data-id="{{ $item->id }}">
                                             <i class="fa fa-pen"></i>
-                                        </button>
-
-                                        <button class="btn btn-sm btn-danger text-white btn-delete py-2"
-                                            data-id="{{ $item->id }}">
-                                            <i class="fa fa-trash"></i>
                                         </button>
 
                                     </td>
@@ -123,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </form>
@@ -149,7 +145,8 @@
                         </div>
                         <div class="form-group mt-2">
                             <label for="user_id">User</label>
-                            <input type="text" class="form-control" name="user_id" id="user_id_edit" required readonly>
+                            <input type="text" class="form-control" name="user_id" id="user_id_edit" required
+                                readonly>
                         </div>
                         <div class="form-group mt-2">
                             <label for="pt_id">PT</label>
@@ -164,7 +161,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Save changes</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
                     </div>
                 </div>
             </form>
@@ -202,63 +199,41 @@
             });
 
             // === UPDATE ===
+            // ketika berhasil reload modal edit
             $("#formKaryawan").submit(function(e) {
                 e.preventDefault();
                 let id = $("#karyawan_id").val();
                 let formData = $(this).serialize() + "&_method=PUT";
 
-                Swal.fire({
-                    title: "Yakin update data ini?",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonText: "Ya, update",
-                    cancelButtonText: "Batal"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ url('/admin/master/karyawan/update') }}/" + id,
-                            type: "POST",
-                            data: formData,
-                            success: function(res) {
-                                $("#exampleModalEdit").modal("hide");
-                                $("#formKaryawan")[0].reset();
-                                table.ajax.reload(null, false);
-                                Swal.fire("Sukses", "Data berhasil diupdate", "success");
-                            },
-                            error: function(xhr) {
-                                let msg = xhr.responseJSON?.message || "Terjadi kesalahan";
-                                Swal.fire("Error", msg, "error");
-                            }
+                $.ajax({
+                    url: "{{ url('/admin/master/karyawan/update') }}/" + id,
+                    type: "POST",
+                    data: formData,
+                    success: function(res) {
+                        $("#exampleModalEdit").modal("hide");
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: res.success,
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1000
+                        }).then(() => {
+                            location.reload();
                         });
-                    }
-                });
-            });
-
-            // === DELETE ===
-            $(document).on("click", ".btn-delete", function() {
-                let id = $(this).data("id");
-
-                Swal.fire({
-                    title: "Yakin hapus data ini?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Ya, hapus",
-                    cancelButtonText: "Batal"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "{{ url('/admin/master/karyawan/destroy') }}/" + id,
-                            type: "DELETE",
-                            success: function(res) {
-                                table.ajax.reload(null, false);
-                                Swal.fire("Deleted!", "Data berhasil dihapus.",
-                                    "success");
-                            },
-                            error: function(xhr) {
-                                let msg = xhr.responseJSON?.message ||
-                                    "Terjadi kesalahan";
-                                Swal.fire("Error", msg, "error");
-                            }
+                    },
+                    error: function(xhr) {
+                        let msg = xhr.responseJSON?.message ||
+                            "Terjadi kesalahan";
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: msg,
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2000
                         });
                     }
                 });

@@ -55,6 +55,7 @@ class KaryawanController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'pt_id' => 'required',
         ]);
@@ -63,7 +64,7 @@ class KaryawanController extends Controller
             'pt_id' => $request->pt_id,
         ]);
 
-        return response()->json(['success' => 'successfully']);
+        return response()->json(['success' => 'Data berhasil diupdate']);
     }
 
     public function destroy($id)
