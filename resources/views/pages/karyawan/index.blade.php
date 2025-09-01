@@ -1,11 +1,15 @@
 @extends('layouts.main')
 
-<title>Karyawan | SMB Ticket's</title>
+<title>Employees | SMB Ticket's</title>
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <h5 class="card-title">Karyawan</h5>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Employees</h5>
+            <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fa fa-plus-circle"></i>
+                Add Employee
+            </button>
         </div>
         <div class="card-body">
             <div class="row">
@@ -34,8 +38,18 @@
                                             {{ $item->user ? $item->user->name : '-' }}
                                         </span>
                                     </td>
-                                    <td>{{ $item->pt ? $item->pt->name : '-' }}</td>
-                                    <td>{{ $item->user ? $item->user->groupuser->department->name : '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-building"></i>
+                                            {{ $item->pt ? $item->pt->name : '-' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            <i class="fa fa-user-circle"></i>
+                                            {{ $item->user ? $item->user->groupuser->department->name : '-' }}
+                                        </span>
+                                    </td>
                                     <td>
                                         @if ($item->user)
                                             @foreach ($item->user->roles as $role)
@@ -50,12 +64,12 @@
                                     </td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-success text-white btn py-2"
+                                        <button class="btn btn-sm btn-success text-white btn-edit py-2"
                                             data-id="{{ $item->id }}">
                                             <i class="fa fa-pen"></i>
                                         </button>
 
-                                        <button class="btn btn-sm btn-danger text-white py-2"
+                                        <button class="btn btn-sm btn-danger text-white btn-delete py-2"
                                             data-id="{{ $item->id }}">
                                             <i class="fa fa-trash"></i>
                                         </button>
@@ -72,106 +86,184 @@
     </div>
 
 
+    <!-- Modal add -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('karyawan.store') }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mt-2">
+                            <label for="nik">NIK</label>
+                            <input type="text" class="form-control" name="nik" id="nik"
+                                aria-describedby="emailHelpId" placeholder="Nomor Induk Karyawan" required>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="user_id">User</label>
+                            <select class="form-control" name="user_id" id="user_id" required>
+                                <option value="{{ null }}">Pilih user</option>
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="pt_id">PT</label>
+                            <select class="form-control" name="pt_id" id="pt_id" required>
+                                <option value="{{ null }}">Pilih PT</option>
+                                @foreach ($pt as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit -->
+    <div class="modal fade" id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalEditLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="formKaryawan" method="post">
+                @csrf
+                <input type="hidden" name="id" id="karyawan_id">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalEditLabel">Edit Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mt-2">
+                            <label for="nik">NIK</label>
+                            <input type="text" class="form-control" name="nik" id="nik_edit" required readonly>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="user_id">User</label>
+                            <input type="text" class="form-control" name="user_id" id="user_id_edit" required readonly>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="pt_id">PT</label>
+                            <select class="form-control" name="pt_id" id="pt_id_edit" required>
+                                <option value="{{ null }}">Pilih PT</option>
+                                <option value="">Pilih PT</option>
+                                @foreach ($pt as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
     <script>
         $(document).ready(function() {
+
             var table = $('#dom-jqry').DataTable();
 
-            // Tampilkan data di modal saat tombol edit diklik
-            $(document).on('click', '.edit-department-btn', function(e) {
-                let id = $(this).data('id');
-                let name = $(this).data('name');
+            // === EDIT ===
+            $(document).on("click", ".btn-edit", function() {
+                let id = $(this).data("id");
 
-                $('#department_id').val(id);
-                $('#department_name').val(name);
-            });
+                $.get("{{ url('/admin/master/karyawan') }}/" + id + "/edit", function(res) {
+                    $("#exampleModalEditLabel").text("Edit Employee");
 
-            // Handle update permission
-            $('#editDepartmentForm').on('submit', function(e) {
-                e.preventDefault();
+                    $("#karyawan_id").val(res.karyawan.id);
+                    $("#nik_edit").val(res.karyawan.nik);
+                    $("#user_id_edit").val(res.karyawan.user ? res.karyawan.user.name : "");
 
-                let id = $('#department_id').val();
-                let formData = new FormData(this);
+                    let ptOptions = '<option value="{{ null }}">Pilih PT</option>';
+                    $.each(res.pt, function(i, p) {
+                        let selected = (p.id == res.karyawan.pt_id) ? "selected" : "";
+                        ptOptions +=
+                            `<option value="${p.id}" ${selected}>${p.name}</option>`;
+                    });
+                    $("#pt_id_edit").html(ptOptions);
 
-                $.ajax({
-                    url: `/admin/departements/update/${id}`,
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        $('#exampleModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.success,
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                        setTimeout(() => location.reload(), 1000);
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops!',
-                            text: 'Failed to update departements!',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                    }
+                    $("#exampleModalEdit").modal("show");
                 });
             });
 
-            $(document).on('click', '.delete-department', function(e) {
+            // === UPDATE ===
+            $("#formKaryawan").submit(function(e) {
                 e.preventDefault();
-                let id = $(this).data('id');
+                let id = $("#karyawan_id").val();
+                let formData = $(this).serialize() + "&_method=PUT";
 
                 Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
+                    title: "Yakin update data ini?",
+                    icon: "question",
                     showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
+                    confirmButtonText: "Ya, update",
+                    cancelButtonText: "Batal"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: `/admin/departements/destroy/${id}`,
-                            type: "DELETE",
-                            data: {
-                                _token: "{{ csrf_token() }}"
+                            url: "{{ url('/admin/master/karyawan/update') }}/" + id,
+                            type: "POST",
+                            data: formData,
+                            success: function(res) {
+                                $("#exampleModalEdit").modal("hide");
+                                $("#formKaryawan")[0].reset();
+                                table.ajax.reload(null, false);
+                                Swal.fire("Sukses", "Data berhasil diupdate", "success");
                             },
-                            success: function(response) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Deleted!",
-                                    text: response.success,
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
-                                setTimeout(() => location.reload(), 1000);
-                            },
-                            error: function() {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Oops!",
-                                    text: "Failed to delete department!",
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
+                            error: function(xhr) {
+                                let msg = xhr.responseJSON?.message || "Terjadi kesalahan";
+                                Swal.fire("Error", msg, "error");
                             }
                         });
                     }
                 });
             });
+
+            // === DELETE ===
+            $(document).on("click", ".btn-delete", function() {
+                let id = $(this).data("id");
+
+                Swal.fire({
+                    title: "Yakin hapus data ini?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, hapus",
+                    cancelButtonText: "Batal"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('/admin/master/karyawan/destroy') }}/" + id,
+                            type: "DELETE",
+                            success: function(res) {
+                                table.ajax.reload(null, false);
+                                Swal.fire("Deleted!", "Data berhasil dihapus.",
+                                    "success");
+                            },
+                            error: function(xhr) {
+                                let msg = xhr.responseJSON?.message ||
+                                    "Terjadi kesalahan";
+                                Swal.fire("Error", msg, "error");
+                            }
+                        });
+                    }
+                });
+            });
+
 
         });
     </script>

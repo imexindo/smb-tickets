@@ -30,7 +30,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Departments Name</th>
+                                <th>Department</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>

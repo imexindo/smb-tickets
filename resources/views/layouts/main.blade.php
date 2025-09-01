@@ -38,6 +38,9 @@
         background-color: #28a745 !important;
         border: 1px solid#03a328 !important;
       }
+      table {
+        font-size: 14px !important;
+      }
     </style>
     
   </head>

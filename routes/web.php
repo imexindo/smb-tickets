@@ -39,6 +39,10 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
 
         Route::middleware(['permission:master_karyawan_access'])->group(function () {
             Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+            Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
+            Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+            Route::put('/karyawan/update/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
+            Route::delete('/karyawan/destroy/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
         });
 
         Route::middleware(['permission:departments_access'])->prefix('departements')->group(function () {

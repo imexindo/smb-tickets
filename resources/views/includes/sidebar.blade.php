@@ -2,7 +2,7 @@
     <div class="app-brand demo">
         <a href="/admin/dashboard" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('assets/logo.png') }}" alt="" srcset="" width="40px">
+                <img src="{{ asset('assets/logo.png') }}" alt="" srcset="" width="150px">
             </span>
             {{-- <span class="app-brand-text demo menu-text fw-bolder ms-2">SMB TICKET</span> --}}
         </a>
@@ -15,16 +15,15 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <!-- Dashboard -->
+
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Pages</span>
+        </li>
+
         <li class="menu-item">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <div data-i18n="Analytics"><i class="fa fa-home"></i> Dashboard</div>
             </a>
-        </li>
-
-
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Pages</span>
         </li>
 
         <li class="menu-item {{ request()->routeIs('karyawan.*', 'departements.*') ? 'open active' : '' }}">
@@ -36,7 +35,7 @@
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('karyawan.*') ? 'active' : '' }}">
                     <a href="{{ route('karyawan.index') }}" class="menu-link">
-                        <div data-i18n="Without menu">Karyawan</div>
+                        <div data-i18n="Without menu">Employees</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('departements.*') ? 'active' : '' }}">
@@ -47,8 +46,7 @@
             </ul>
         </li>
 
-        <li
-            class="menu-item {{ request()->routeIs('users.*', 'roles.*', 'permissions.*') ? 'open active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('users.*', 'roles.*', 'permissions.*') ? 'open active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                 <div data-i18n="Authentications">Authentication</div>
