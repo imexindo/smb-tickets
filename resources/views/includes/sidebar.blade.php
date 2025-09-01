@@ -16,7 +16,7 @@
 
   <ul class="menu-inner py-1">
     <!-- Dashboard -->
-    <li class="menu-item active">
+    <li class="menu-item">
       <a href="{{ route('dashboard') }}" class="menu-link">
         <div data-i18n="Analytics"><i class="fa fa-rss"></i>  Dashboard</div>
       </a>
@@ -61,19 +61,31 @@
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Pages</span>
     </li>
-    <li class="menu-item">
+    
+    <li class="menu-item {{ request()->routeIs('users.*','roles.*','permissions.*') ? 'open active' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
         <div data-i18n="Authentications">Authentication</div>
       </a>
       <ul class="menu-sub">
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
           <a href="{{ route('users.index') }}" class="menu-link">
             <div data-i18n="Basic">Users</div>
           </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+          <a href="{{ route('roles.index') }}" class="menu-link">
+            <div data-i18n="Basic">Roles</div>
+          </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+          <a href="{{ route('permissions.index') }}" class="menu-link">
+            <div data-i18n="Basic">Permissions</div>
+          </a>
+        </li>
       </ul>
     </li>
+    
 
 
     <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span></li>

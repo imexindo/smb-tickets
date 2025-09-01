@@ -1,88 +1,75 @@
 @extends('layouts.main')
 
-<title>Permission's | SMB Claims</title>
+<title>Permission's | SMB Ticket's</title>
 
-@include('includes.dt-css')
 
 @section('content')
-    <div class="pc-content">
-        <!-- [ breadcrumb ] start -->
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0)">Permission</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Permissions</h5>
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                <form action="{{ route('permissions.store') }}" method="POST">
-                    <div class="row">
-                        <div class="col-md-4">
-                            @csrf
-                            <div class="form-group">
-                                <input type="text" name="name" class="form-control" required
-                                    placeholder="Input Permission name">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{{ route('permissions.store') }}" method="POST">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control" required
+                                        placeholder="Input Permission name">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus-circle"></i> Create Permission
+                                </button>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-plus-circle"></i> Create Permission
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <div class="card">
-                    <div class="card-body">
-                        <table id="dom-jqry" class="table table-striped" style="width:100%">
-                            <thead>
+                    </form>
+                    <table id="dom-jqry" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Permissions Name</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($permissions as $permission)
                                 <tr>
-                                    <th>#</th>
-                                    <th>Permissions Name</th>
-                                    <th>Created</th>
-                                    <th>Action</th>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-cog"></i>
+                                            {{ $permission->name }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $permission->created_at }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success text-white edit-permission-btn py-2"
+                                            data-id="{{ $permission->id }}" data-name="{{ $permission->name }}"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="fa fa-pen"></i>
+                                        </button>
+
+                                        <button class="btn btn-sm btn-danger text-white delete-permission py-2"
+                                            data-id="{{ $permission->id }}">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($permissions as $permission)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            <span class="badge bg-primary">
-                                                <i class="fa fa-cog"></i>
-                                                {{ $permission->name }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $permission->created_at }}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-success text-white edit-permission-btn"
-                                                data-id="{{ $permission->id }}" data-name="{{ $permission->name }}"
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <i class="fa fa-pen"></i>
-                                            </button>
+                            @endforeach
 
-                                            <button class="btn btn-sm btn-danger text-white delete-permission"
-                                                data-id="{{ $permission->id }}">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -110,8 +97,6 @@
         </div>
     </div>
 
-    @include('includes.dt')
-    
     <script>
         $(document).ready(function() {
             var table = $('#dom-jqry').DataTable();

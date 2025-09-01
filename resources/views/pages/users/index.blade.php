@@ -2,87 +2,86 @@
 
 <title>User's | SMB Ticket's</title>
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 @section('content')
     <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Users</h5>
+        </div>
         <div class="card-body">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-borderless align-middle" id="dom-jqry">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Devisi</th>
-                                <th>Group</th>
-                                <th>Last Login</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            @foreach ($users as $item)
-                                <tr data-id="{{ $item->id }}">
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>
-                                        @if ($item->roles->isNotEmpty())
-                                            @foreach ($item->roles as $role)
-                                                <span class="badge bg-primary">
-                                                    <i class="fa fa-user-cog"></i>
-                                                    {{ $role->name }}
-                                                    @if (!$loop->last)
-                                                        ,
-                                                    @endif
-                                                </span>
-                                            @endforeach
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($item->groupuser)
-                                            <span class="badge bg-secondary">
-                                                <i class="fa fa-user-circle"></i>
-                                                {{ $item->groupuser->division->name }}
-                                            </span>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
+            <table class="table table-striped table-hover table-borderless align-middle" id="dom-jqry">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Devisi</th>
+                        <th>Group</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach ($users as $item)
+                        <tr data-id="{{ $item->id }}">
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td>
+                                @if ($item->roles->isNotEmpty())
+                                    @foreach ($item->roles as $role)
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-user-cog"></i>
+                                            {{ $role->name }}
+                                            @if (!$loop->last)
+                                                ,
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->groupuser)
+                                    <span class="badge bg-secondary">
+                                        <i class="fa fa-user-circle"></i>
+                                        {{ $item->groupuser->division->name }}
+                                    </span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
 
-                                        @if ($item->groupuser)
-                                            <span class="badge {{ $item->groupuser->group->colors }}">
-                                                <i class="fa fa-check-circle"></i>
-                                                {{ $item->groupuser->group->name }}
-                                            </span>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($item->last_login)->format('d-m-Y H:i:s') }}
-                                    </td>
+                                @if ($item->groupuser)
+                                    <span class="badge {{ $item->groupuser->group->colors }}">
+                                        <i class="fa fa-check-circle"></i>
+                                        {{ $item->groupuser->group->name }}
+                                    </span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                {{ \Carbon\Carbon::parse($item->last_login)->format('d-m-Y H:i:s') }}
+                            </td>
 
-                                    <td>
-                                        <button class="btn btn-sm btn-success btn-edit" data-id="{{ $item->id }}">
-                                            <i class="fa fa-pen"></i>
-                                        </button>
+                            <td>
+                                <button class="btn btn-sm btn-success btn-edit py-2" data-id="{{ $item->id }}">
+                                    <i class="fa fa-pen"></i>
+                                </button>
 
-                                        <button class="btn btn-sm btn-danger btn-delete" data-id="{{ $item->id }}">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                <button class="btn btn-sm btn-danger btn-delete py-2" data-id="{{ $item->id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -305,9 +304,9 @@
                             success: function(res) {
                                 Swal.fire("Deleted!", res.success ??
                                     "User berhasil dihapus.", "success").then(
-                            () => {
-                                    location.reload();
-                                });
+                                    () => {
+                                        location.reload();
+                                    });
                             },
                             error: function(xhr) {
                                 Swal.fire("Error", xhr.responseJSON?.message ??

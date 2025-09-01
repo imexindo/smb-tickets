@@ -1,84 +1,70 @@
 @extends('layouts.main')
 
-<title>Role's | SMB Claims</title>
+<title>Roles | SMB Claims</title>
 
-@include('includes.dt-css')
 
 @section('content')
-    <div class="pc-content">
-        <!-- [ breadcrumb ] start -->
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0)">Roles</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Roles</h5>
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                <form action="{{ route('roles.store') }}" method="POST">
-                    <div class="row">
-                        <div class="col-md-4">
-                            @csrf
-                            <div class="form-group">
-                                <label for="name">Role Name</label>
-                                <input type="text" name="name" class="form-control" required
-                                    placeholder="Input Role name">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{{ route('roles.store') }}" method="POST">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Role Name</label>
+                                    <input type="text" name="name" class="form-control" required
+                                        placeholder="Input Role name">
+                                </div>
+                            </div>
+                            <div class="col-6 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus-circle"></i> Create Role
+                                </button>
                             </div>
                         </div>
-                        <div class="col-6 mt-4">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-plus-circle"></i> Create Role
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <div class="card">
-                    <div class="card-body">
-                        <table id="dom-jqry" class="table table-striped" style="width:100%">
-                            <thead>
+                    </form>
+                    <table id="dom-jqry" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Role Name</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($roles as $role)
                                 <tr>
-                                    <th>#</th>
-                                    <th>Role Name</th>
-                                    <th>Created</th>
-                                    <th>Action</th>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-cog"></i>
+                                            {{ $role->name }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $role->created_at }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success text-white edit-role-btn py-2"
+                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="fa fa-pen"></i>
+                                        </button>
+
+                                        {{-- <button class="btn btn-sm btn-danger text-white delete-role py-2"
+                                            data-id="{{ $role->id }}">
+                                            <i class="fa fa-trash"></i>
+                                        </button> --}}
+
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($roles as $role)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            <span class="badge bg-primary">
-                                                <i class="fa fa-cog"></i>
-                                                {{ $role->name }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $role->created_at }}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-success text-white edit-role-btn"
-                                                data-id="{{ $role->id }}" data-name="{{ $role->name }}"
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <i class="fa fa-pen"></i>
-                                            </button>
-
-                                            {{-- <button class="btn btn-sm btn-danger text-white delete-role"
-                                                data-id="{{ $role->id }}">
-                                                <i class="fa fa-trash"></i>
-                                            </button> --}}
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -122,8 +108,6 @@
         </div>
     </div>
 
-
-    @include('includes.dt')
 
     <script>
         $(document).ready(function() {
