@@ -27,23 +27,28 @@
             <span class="menu-header-text">Pages</span>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('karyawan.*', 'departements.*') ? 'open active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Master</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('karyawan.*') ? 'active' : '' }}">
+                    <a href="{{ route('karyawan.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Karyawan</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('departements.*') ? 'active' : '' }}">
+                    <a href="{{ route('departements.index') }}" class="menu-link">
+                        <div data-i18n="Basic">Departments</div>
                     </a>
                 </li>
             </ul>
         </li>
 
         <li
-            class="menu-item {{ request()->routeIs('users.*', 'roles.*', 'permissions.*', 'departements.*') ? 'open active' : '' }}">
+            class="menu-item {{ request()->routeIs('users.*', 'roles.*', 'permissions.*') ? 'open active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                 <div data-i18n="Authentications">Authentication</div>
@@ -62,11 +67,6 @@
                 <li class="menu-item {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                     <a href="{{ route('permissions.index') }}" class="menu-link">
                         <div data-i18n="Basic">Permissions</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('departements.*') ? 'active' : '' }}">
-                    <a href="{{ route('departements.index') }}" class="menu-link">
-                        <div data-i18n="Basic">Departments</div>
                     </a>
                 </li>
 

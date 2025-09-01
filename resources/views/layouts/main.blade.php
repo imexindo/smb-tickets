@@ -29,6 +29,16 @@
     />
     
     @include('includes.style')
+
+    <style>
+      .bg-success {
+        background-color: #28a745 !important;
+      }
+      .btn-success {
+        background-color: #28a745 !important;
+        border: 1px solid#03a328 !important;
+      }
+    </style>
     
   </head>
 

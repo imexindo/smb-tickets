@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
@@ -36,9 +37,17 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('master')->group(function () {
 
-        Route::middleware(['permission:master_categories_access'])->group(function () {
-            // Route::get('/categories', [CategoriesController::class, 'index'])->name('master.categories.index');
+        Route::middleware(['permission:master_karyawan_access'])->group(function () {
+            Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
         });
+
+        Route::middleware(['permission:departments_access'])->prefix('departements')->group(function () {
+            Route::get('/', [DepartementController::class, 'index'])->name('departements.index');
+            Route::post('/store', [DepartementController::class, 'store'])->name('departements.store');
+            Route::put('/update/{group}', [DepartementController::class, 'update'])->name('departements.update');
+            Route::delete('/destroy/{id}', [DepartementController::class, 'destroy'])->name('departements.destroy');
+        });
+        
     });
 
 
@@ -56,12 +65,7 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
         Route::delete('/destroy/{id}', [GroupController::class, 'destroy'])->name('groups.destroy');
     });
 
-    Route::middleware(['permission:departments_access'])->prefix('departements')->group(function () {
-        Route::get('/', [DepartementController::class, 'index'])->name('departements.index');
-        Route::post('/store', [DepartementController::class, 'store'])->name('departements.store');
-        Route::put('/update/{group}', [DepartementController::class, 'update'])->name('departements.update');
-        Route::delete('/destroy/{id}', [DepartementController::class, 'destroy'])->name('departements.destroy');
-    });
+
 
     Route::middleware(['permission:roles_access'])->prefix('roles')->group(function () {
         Route::get('/', [RolePermissionController::class, 'indexRoles'])->name('roles.index');
