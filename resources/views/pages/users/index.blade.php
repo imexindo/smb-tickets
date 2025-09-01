@@ -17,7 +17,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Devisi</th>
+                        <th>Department</th>
                         <th>Group</th>
                         <th>Last Login</th>
                         <th>Actions</th>
@@ -48,7 +48,7 @@
                                 @if ($item->groupuser)
                                     <span class="badge bg-secondary">
                                         <i class="fa fa-user-circle"></i>
-                                        {{ $item->groupuser->division->name }}
+                                        {{ $item->groupuser->department->name }}
                                     </span>
                                 @else
                                     -
@@ -125,11 +125,11 @@
                             </div>
                             <div class="col-4 mt-3">
                                 <div class="form-group">
-                                    <label for="division">Division</label>
-                                    <select class="form-control" name="division" id="division">
-                                        <option value="">Select Division</option>
-                                        @foreach ($divisions as $division)
-                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                    <label for="dep_id">Department</label>
+                                    <select class="form-control" name="dep_id" id="dep_id">
+                                        <option value="">Select Department</option>
+                                        @foreach ($departments as $department)
+                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -223,10 +223,10 @@
                             $("#editUserForm #roles").val([]).trigger("change");
                         }
 
-                        // group & division
+                        // group & department
                         if (res.groupuser) {
-                            $("#editUserForm #division")
-                                .val(res.groupuser.division_id)
+                            $("#editUserForm #dep_id")
+                                .val(res.groupuser.dep_id)
                                 .trigger("change");
                             $("#editUserForm #group")
                                 .val(res.groupuser.group_id)

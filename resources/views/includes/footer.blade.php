@@ -5,18 +5,8 @@
             <script>
                 document.write(new Date().getFullYear());
             </script>
-            , made with ❤️ by
-            <a href="https://SMB TICKET.com" target="_blank" class="footer-link fw-bolder">SMB TICKET</a>
-        </div>
-        <div>
-            <a href="https://SMB TICKET.com/license/" class="footer-link me-4" target="_blank">License</a>
-            <a href="https://SMB TICKET.com/" target="_blank" class="footer-link me-4">More Themes</a>
-
-            <a href="https://SMB TICKET.com/demo/sneat-bootstrap-html-admin-template/documentation/" target="_blank"
-                class="footer-link me-4">Documentation</a>
-
-            <a href="https://github.com/SMB TICKET/sneat-html-admin-template-free/issues" target="_blank"
-                class="footer-link me-4">Support</a>
+            , made by
+            <a href="#" target="_blank" class="footer-link fw-bolder">IT</a>
         </div>
     </div>
 </footer>

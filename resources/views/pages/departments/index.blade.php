@@ -41,7 +41,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <span class="badge bg-primary">
-                                            <i class="fa fa-cog"></i>
+                                            <i class="fa fa-user-cog"></i>
                                             {{ $department->name }}
                                         </span>
                                     </td>
@@ -114,15 +114,14 @@
                 e.preventDefault();
 
                 let id = $('#department_id').val();
-                let name = $('#permission_name').val();
+                let formData = new FormData(this);
 
                 $.ajax({
                     url: `/admin/departements/update/${id}`,
-                    type: 'PUT',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        name: name
-                    },
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         $('#exampleModal').modal('hide');
                         Swal.fire({
@@ -149,6 +148,8 @@
                     }
                 });
             });
+
+
 
             $(document).on('click', '.delete-department', function(e) {
                 e.preventDefault();

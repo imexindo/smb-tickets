@@ -18,8 +18,8 @@ class UserController extends Controller
         
         $roles = Role::all();
         $groups = Groups::all();
-        $divisions = Devision::all();
-        return view('pages.users.index', compact('users', 'roles', 'groups', 'divisions'));
+        $departments = Devision::all();
+        return view('pages.users.index', compact('users', 'roles', 'groups', 'departments'));
     }
 
 
@@ -37,7 +37,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'roles' => 'required',
-            'division' => 'required',
+            'dep_id' => 'required',
             'group' => 'required',
         ]);
 
@@ -53,7 +53,7 @@ class UserController extends Controller
             ['user_id' => $user->id],
             [
             'group_id' => $request->input('group'),
-            'division_id' => $request->input('division'),
+            'dep_id' => $request->input('dep_id'),
         ]
     );
 

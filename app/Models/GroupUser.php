@@ -11,7 +11,7 @@ class GroupUser extends Model
 
     protected $table = 'group_user';
 
-    protected $fillable = ['group_id', 'user_id', 'division_id'];
+    protected $fillable = ['group_id', 'user_id', 'dep_id'];
 
     public function group()
     {
@@ -23,8 +23,8 @@ class GroupUser extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function division()
+    public function department()
     {
-        return $this->belongsTo(Devision::class, 'division_id');
+        return $this->belongsTo(Devision::class, 'dep_id');
     }
 }
