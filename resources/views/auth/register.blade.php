@@ -1,101 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Register | SMB Ticket</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="{{ asset('majestic/vendors/mdi/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('majestic/vendors/base/vendor.bundle.base.css') }}">
-    <!-- endinject -->
-    <!-- plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('majestic/css/style.css') }}">
-    <!-- endinject -->
-    <link rel="shortcut icon" href="{{ asset('assets/logo.png') }}" />
+    <title>Register | SMB Ticket's</title>
 
-    <style>
-        body {
-            position: relative;
-        }
+    <meta name="description" content="" />
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 550px;
-            height: 550px;
-            background: url("{{ asset('assets/logo.png') }}") no-repeat top left;
-            background-size: contain;
-            filter: blur(5px);
-            opacity: 1;
-            z-index: 0;
-        }
-    </style>
-</head>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('sneat/assets/img/favicon/favicon.ico') }}" />
 
-<body>
-    <div class="container-scroller">
-        <div class="container-fluid page-body-wrapper full-page-wrapper">
-            <div class="content-wrapper d-flex align-items-center auth px-0">
-                <div class="row w-100 mx-0">
-                    <div class="col-lg-4 mx-auto">
-                        <div class="auth-form-light text-left pt-3 pb-5 px-4 px-sm-5">
-                            <div class="brand-logo">
-                                <img src="{{ asset('assets/logo.png') }}" alt="logo"
-                                    style="height: 55px; width: 50px;">
-                            </div>
-                            <h4>New here?</h4>
-                            <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
-                            <form class="pt-3" method="POST" action="{{ route('register') }}">
-                                @csrf
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control-lg" name="name" placeholder="Name"
-                                        required autofocus autocomplete="name" value="{{ old('name') }}">
-                                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-lg" name="email" placeholder="Email">
-                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control form-control-lg" name="password" id="password"
-                                        placeholder="Password" required autocomplete="new-password">
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control form-control-lg" id="password-confirm"
-                                        name="password_confirmation" placeholder="Confirm Password" required
-                                        autocomplete="new-password">
-                                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                </div>
-                                <div class="mt-3">
-                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN UP</button>
-                                </div>
-                                <div class="text-center mt-4 font-weight-light">
-                                    Already have an account? <a href="/login" class="text-primary">Login</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/fonts/boxicons.css') }}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('sneat/assets/css/demo.css') }}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/css/pages/page-auth.css') }}" />
+    <!-- Helpers -->
+    <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
+  </head>
+
+  <body>
+    <!-- Content -->
+
+    <div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+          <!-- Register Card -->
+          <div class="card">
+            <div class="card-body">
+              <!-- Logo -->
+              <div class="app-brand justify-content-center">
+                <a href="{{ route('dashboard') }}" class="app-brand-link gap-2">
+                  <img src="{{ asset('assets/logo.png') }}" style="width: 60px; height: 70px;">
+                  {{-- <span class="app-brand-text demo text-body fw-bolder">Sneat</span> --}}
+                </a>
+              </div>
+              <!-- /Logo -->
+              <h4 class="mb-2">Adventure starts here 🚀</h4>
+              <p class="mb-4">Make your app management easy and fun!</p>
+
+              <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    autofocus
+                    value="{{ old('name') }}"
+                  />
+                  <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
-            </div>
-            <!-- content-wrapper ends -->
-        </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="{{ asset('majestic/vendors/base/vendor.bundle.base.js') }}"></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src="{{ asset('majestic/js/off-canvas.js') }}"></script>
-    <script src="{{ asset('majestic/js/hoverable-collapse.js') }}"></script>
-    <script src="{{ asset('majestic/js/template.js') }}"></script>
-    <!-- endinject -->
-</body>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value="{{ old('email') }}"
+                  />
+                  <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
+                <div class="mb-3 form-password-toggle">
+                  <label class="form-label" for="password">Password</label>
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      name="password"
+                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                      aria-describedby="password"
+                      value="{{ old('password') }}"
+                    />
+                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                  </div>
+                  <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
 
+                <div class="mb-3 form-password-toggle">
+                  <label class="form-label" for="password_confirmation">Confirm Password</label>
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="password"
+                      id="password_confirmation"
+                      class="form-control"
+                      name="password_confirmation"
+                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                      aria-describedby="password_confirmation"
+                    />
+                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                  </div>
+                  <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                </div>
+
+                <div class="mb-3">
+                  <x-input-error :messages="$errors->get('terms')" class="mt-2" />
+                </div>
+                <button class="btn btn-primary d-grid w-100">Sign up</button>
+              </form>
+
+              <p class="text-center">
+                <span>Already have an account?</span>
+                <a href="{{ route('login') }}">
+                  <span>Sign in instead</span>
+                </a>
+              </p>
+            </div>
+          </div>
+          <!-- Register Card -->
+        </div>
+      </div>
+    </div>
+
+    <!-- / Content -->
+
+    {{-- <div class="buy-now">
+      <a
+        href="https://SMB TICKET.com/products/sneat-bootstrap-html-admin-template/"
+        target="_blank"
+        class="btn btn-danger btn-buy-now"
+        >Upgrade to Pro</a
+      >
+    </div> --}}
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{{ asset('sneat/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+
+    <script src="{{ asset('sneat/assets/vendor/js/menu.js') }}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="{{ asset('sneat/assets/js/main.js') }}"></script>
+
+    <!-- Page JS -->
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </body>
 </html>

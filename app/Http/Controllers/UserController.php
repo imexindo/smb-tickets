@@ -25,11 +25,9 @@ class UserController extends Controller
 
     public function edit($id) {
 
-        $users = User::with(['groupuser'])
-            ->orderBy('created_at', 'desc')
-            ->find($id);
+        $user = User::with(['groupuser', 'roles'])->find($id);
 
-        return response()->json($users);
+        return response()->json($user);
     }
 
     public function update(Request $request, User $user)

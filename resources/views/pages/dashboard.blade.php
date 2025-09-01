@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+<title>Dashboard | SMB Ticket's</title>
+
 @section('content')
     <div class="row">
         <div class="col-lg-8 mb-4 order-0">

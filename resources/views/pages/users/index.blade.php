@@ -76,7 +76,6 @@
                                         <button class="btn btn-sm btn-danger btn-delete" data-id="{{ $item->id }}">
                                             <i class="fa fa-trash"></i>
                                         </button>
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -88,7 +87,7 @@
     </div>
 
     {{-- edit --}}
-    <div class="modal fade" id="editUsers" tabindex="-1" aria-labelledby="editUsersLabel" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" aria-labelledby="editUsersLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -118,6 +117,7 @@
                                 <div class="form-group">
                                     <label for="roles">Role</label>
                                     <select class="form-control" name="roles[]" id="roles">
+                                        <option value="">Select Role</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}">{{ $role->name }}</option>
                                         @endforeach
@@ -128,6 +128,7 @@
                                 <div class="form-group">
                                     <label for="division">Division</label>
                                     <select class="form-control" name="division" id="division">
+                                        <option value="">Select Division</option>
                                         @foreach ($divisions as $division)
                                             <option value="{{ $division->id }}">{{ $division->name }}</option>
                                         @endforeach
@@ -138,6 +139,7 @@
                                 <div class="form-group">
                                     <label for="group">Group</label>
                                     <select class="form-control" name="group" id="group">
+                                        <option value="">Select Group</option>
                                         @foreach ($groups as $group)
                                             <option value="{{ $group->id }}">{{ $group->name }}</option>
                                         @endforeach
@@ -201,6 +203,123 @@
                     }
                 ]
             });
+
+            // === Button Edit ===
+            $(document).on("click", ".btn-edit", function() {
+                let id = $(this).data("id");
+
+                $.ajax({
+                    url: "/admin/users/" + id + "/edit",
+                    type: "GET",
+                    success: function(res) {
+                        // isi input
+                        $("#editUserForm #name").val(res.name);
+                        $("#editUserForm #email").val(res.email);
+
+                        // roles (multi select)
+                        if (res.roles && res.roles.length > 0) {
+                            let roleIds = res.roles.map(r => r.id);
+                            $("#editUserForm #roles").val(roleIds).trigger("change");
+                        } else {
+                            $("#editUserForm #roles").val([]).trigger("change");
+                        }
+
+                        // group & division
+                        if (res.groupuser) {
+                            $("#editUserForm #division")
+                                .val(res.groupuser.division_id)
+                                .trigger("change");
+                            $("#editUserForm #group")
+                                .val(res.groupuser.group_id)
+                                .trigger("change");
+                        }
+
+                        // set action form
+                        $("#editUserForm").attr("action", "/admin/users/update/" + res.id);
+
+                        // buka modal
+                        $("#editUsersLabel").text("Edit User - " + res.name);
+                        $("#editUsersLabel").closest(".modal").modal("show");
+                    },
+                    error: function() {
+                        Swal.fire("Error", "Gagal mengambil data user!", "error");
+                    },
+                });
+            });
+
+
+            // // === Save Changes ===
+            $(document).on("click", "#saveUserChanges", function() {
+                let form = $("#editUserForm");
+                let actionUrl = form.attr("action");
+                let formData = form.serialize();
+
+                $.ajax({
+                    url: actionUrl,
+                    type: "POST",
+                    data: formData + "&_method=PUT",
+                    success: function(res) {
+                        $("#editUsersLabel").closest(".modal").modal("hide");
+
+                        Swal.fire("Success", res.success, "success").then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMsg = "";
+                            $.each(errors, function(key, value) {
+                                errorMsg += value[0] + "<br>";
+                            });
+                            Swal.fire("Validation Error", errorMsg, "error");
+                        } else {
+                            Swal.fire("Error", "Terjadi kesalahan", "error");
+                        }
+                    },
+                });
+            });
+
+
+
+            // Delete
+            $(document).on("click", ".btn-delete", function() {
+                let id = $(this).data("id");
+                let csrf = $('meta[name="csrf-token"]').attr("content");
+
+                Swal.fire({
+                    title: "Yakin hapus user ini?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, hapus",
+                    cancelButtonText: "Batal",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/admin/users/destroy/" + id,
+                            type: "POST",
+                            data: {
+                                _token: csrf,
+                                _method: "DELETE",
+                            },
+                            success: function(res) {
+                                Swal.fire("Deleted!", res.success ??
+                                    "User berhasil dihapus.", "success").then(
+                            () => {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr) {
+                                Swal.fire("Error", xhr.responseJSON?.message ??
+                                    "Gagal menghapus user.", "error");
+                            },
+                        });
+                    }
+                });
+            });
+
+
+
 
 
         });
