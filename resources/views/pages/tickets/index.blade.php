@@ -13,23 +13,73 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <table id="dom-jqry" class="table table-striped" style="width:100%">
+                    <table id="dom-jqry" class="table table-striped nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Action</th>
                                 <th>Status</th>
                                 <th>No</th>
                                 <th>Date</th>
+                                <th>Category</th>
                                 <th>Request By</th>
                                 <th>Role</th>
                                 <th>Dep</th>
-                                <th>Category</th>
                                 <th>Created</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach ($ticket as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fa fa-eye"></i> View
+                                        </button>
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fa fa-pen"></i> Update
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            <i class="fa fa-check-circle"></i>
+                                            {{ $item->latestHistory ? $item->latestHistory->status->name : '-' }}
+                                        </span>
+                                    </td>
+                                    <td style="font-size: 16px; font-weight: bold; color: rgb(25, 66, 200)">{{ $item->no }}</td>
+                                    <td style="font-size: 14px; font-weight: bold; color: rgb(23, 23, 23)">{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            <i class="fa fa-check-circle"></i>
+                                            {{ $item->category ? $item->category->name : '-' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-user"></i>
+                                            {{ $item->user ? $item->user->name : '-' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if ($item->user)
+                                            @foreach ($item->user->roles as $role)
+                                                <span class="badge bg-primary">
+                                                    <i class="fa fa-user-cog"></i> {{ $role->name }}
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            <i class="fa fa-building"></i>
+                                            {{ $item->user ? $item->user->groupuser->department->name : '-' }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $item->created_at }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -41,7 +91,7 @@
     <!-- Modal add -->
     <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAddLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form action="{{ route('ticket.store') }}" method="post">
+            <form action="{{ route('ticket.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -81,17 +131,17 @@
                             </div>
                             <div class="col-12 mt-3 mb-1">
                                 <div class="form-group">
-                                    <label for="upload_by_req">File Attachment <span
-                                            style="font-weight: bold; color: rgb(159, 11, 11); font-style: italic">pdf,
-                                            docx, png, jpg, jpeg, xlsx, csv, zip</span></label>
+                                    <label for="upload_by_req">File Attachment
+                                        <span style="font-weight: bold; color: rgb(159, 11, 11); font-style: italic">
+                                            pdf, docx, png, jpg, jpeg, xlsx, csv, zip
+                                        </span>
+                                    </label>
                                     <div id="drop-area"
                                         class="border border-2 border-dashed rounded p-4 text-center bg-light"
                                         style="cursor: pointer;">
                                         <p class="mb-2">Drag & Drop file di sini atau klik untuk pilih</p>
-                                        <input type="file" id="fileElem" multiple
-                                            accept=".pdf,.docx,.png,.jpg,.jpeg,.xlsx,.csv,.zip" hidden>
-                                        <button type="button" class="btn btn-sm btn-primary"
-                                            onclick="document.getElementById('fileElem').click()">Pilih File</button>
+                                        <input type="file" id="fileElem" name="attachments[]" multiple hidden
+                                            accept=".pdf,.docx,.png,.jpg,.jpeg,.xlsx,.csv,.zip">
                                     </div>
                                     <div id="file-list" class="mt-2"></div>
                                 </div>
@@ -144,74 +194,137 @@
 
     <script>
         $(document).ready(function() {
-            var table = $('#dom-jqry').DataTable();
+            $('#dom-jqry').DataTable({
+                scrollX: true,
+                columnDefs: [{
+                        width: 50,
+                        targets: 0
+                    }, // #
+                    {
+                        width: 250,
+                        targets: 1
+                    }, // Action
+                    {
+                        width: 120,
+                        targets: 2
+                    }, // Status
+                    {
+                        width: 100,
+                        targets: 3
+                    }, // No
+                    {
+                        width: 120,
+                        targets: 4
+                    }, // Date
+                    {
+                        width: 150,
+                        targets: 5
+                    }, // Category
+                    {
+                        width: 150,
+                        targets: 6
+                    }, // Request By
+                    {
+                        width: 200,
+                        targets: 7
+                    }, // Role
+                    {
+                        width: 150,
+                        targets: 8
+                    }, // Dep
+                    {
+                        width: 150,
+                        targets: 9
+                    } // Created
+                ],
+                fixedColumns: true
+            });
         });
     </script>
 
-
     <script>
-        const dropArea = document.getElementById("drop-area");
-        const fileInput = document.getElementById("fileElem");
-        const fileList = document.getElementById("file-list");
+        document.addEventListener("DOMContentLoaded", function() {
+            const dropArea = document.getElementById("drop-area");
+            const fileInput = document.getElementById("fileElem");
+            const fileList = document.getElementById("file-list");
 
-        const allowedExtensions = ['pdf', 'docx', 'png', 'jpg', 'jpeg', 'xlsx', 'csv', 'zip'];
-        let uploadedFiles = [];
+            let selectedFiles = []; // simpan semua file
 
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, (e) => e.preventDefault(), false);
-            dropArea.addEventListener(eventName, (e) => e.stopPropagation(), false);
-        });
+            // Hapus border highlight
+            function removeHighlight() {
+                dropArea.classList.remove("border-primary");
+            }
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.classList.add('bg-primary-subtle');
-            dropArea.addEventListener(eventName, () => dropArea.classList.add('bg-primary-subtle'));
-        });
+            // Highlight area saat drag
+            ["dragenter", "dragover"].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropArea.classList.add("border-primary");
+                });
+            });
 
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove('bg-primary-subtle'));
-        });
+            // Hapus highlight saat drag keluar
+            ["dragleave", "drop"].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    removeHighlight();
+                });
+            });
 
-        dropArea.addEventListener('drop', (e) => {
-            handleFiles(e.dataTransfer.files);
-        });
+            // Klik area → buka file picker
+            dropArea.addEventListener("click", () => fileInput.click());
 
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-            fileInput.value = "";
-        });
+            // Input file manual
+            fileInput.addEventListener("change", (e) => {
+                addFiles(e.target.files);
+            });
 
-        function handleFiles(files) {
-            [...files].forEach(file => {
-                const ext = file.name.split('.').pop().toLowerCase();
+            // Drop file ke area
+            dropArea.addEventListener("drop", (e) => {
+                let dt = e.dataTransfer;
+                let files = dt.files;
+                addFiles(files);
+            });
 
-                if (!allowedExtensions.includes(ext)) {
-                    alert(`File ${file.name} tidak diizinkan. Hanya pdf, docx, png, jpg, jpeg, csv, xlsx, zip.`);
-                    return;
+            function addFiles(files) {
+                for (let file of files) {
+                    if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                        selectedFiles.push(file);
+                    }
                 }
+                updateFileList();
+            }
 
-                if (uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
-                    alert(`File ${file.name} sudah diupload sebelumnya.`);
-                    return;
-                }
+            function updateFileList() {
+                fileList.innerHTML = "";
 
-                uploadedFiles.push(file);
+                selectedFiles.forEach((file, index) => {
+                    let item = document.createElement("div");
+                    item.className =
+                        "d-flex justify-content-between align-items-center border p-2 mb-2 rounded bg-white shadow-sm";
 
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("border", "rounded", "p-2", "mb-2", "d-flex", "justify-content-between",
-                    "align-items-center");
-                fileItem.innerHTML = `
-                <span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
-                <button type="button" class="btn btn-sm btn-danger">Cancel</button>
-            `;
+                    item.innerHTML = `
+                    <span>${file.name} <small class="text-muted">(${(file.size / 20480).toFixed(1)} KB)</small></span>
+                    <button type="button" class="btn btn-sm btn-danger ms-2" data-index="${index}">CANCEL</button>
+                `;
 
-                fileItem.querySelector("button").addEventListener("click", () => {
-                    uploadedFiles = uploadedFiles.filter(f => !(f.name === file.name && f.size === file
-                        .size));
-                    fileItem.remove();
+                    fileList.appendChild(item);
                 });
 
-                fileList.appendChild(fileItem);
-            });
-        }
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
+
+                fileList.querySelectorAll("button").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const i = btn.getAttribute("data-index");
+                        selectedFiles.splice(i, 1);
+                        updateFileList();
+                    });
+                });
+            }
+        });
     </script>
 @endsection

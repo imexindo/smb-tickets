@@ -12,4 +12,9 @@ class History extends Model
     protected $table = 'history';
 
     protected $fillable = ['ticket_id', 'date', 'status_id', 'remark', 'user_id'];
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }
