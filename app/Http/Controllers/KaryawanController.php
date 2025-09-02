@@ -64,7 +64,7 @@ class KaryawanController extends Controller
             'pt_id' => $request->pt_id,
         ]);
 
-        return response()->json(['success' => 'Data berhasil diupdate']);
+        return response()->json(['success' => 'Successfully']);
     }
 
     public function destroy($id)

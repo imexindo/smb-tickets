@@ -29,7 +29,7 @@ class DepartementController extends Controller
         ]);
         $dprt = Devision::find($id);
         $dprt->update($request->all());
-        return response()->json(['success' => 'Department updated successfully']);
+        return response()->json(['success' => 'Successfully']);
     }
     
     public function destroy($id)

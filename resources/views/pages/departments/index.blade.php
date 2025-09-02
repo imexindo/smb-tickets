@@ -16,7 +16,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <input type="text" name="name" class="form-control" required
-                                        placeholder="Input Department name">
+                                        placeholder="Input Department">
                                 </div>
                             </div>
                             <div class="col-6">
@@ -83,7 +83,7 @@
                     <div class="modal-body">
                         <input type="hidden" id="department_id">
                         <div class="form-group">
-                            <label for="name">Department Name</label>
+                            <label for="name">Department</label>
                             <input type="text" class="form-control" name="name" id="department_name" required>
                         </div>
                     </div>

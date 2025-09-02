@@ -71,12 +71,12 @@
               <!-- Logo -->
               <div class="app-brand justify-content-center">
                 <a href="{{ route('dashboard') }}" class="app-brand-link gap-2">
-                  <img src="{{ asset('assets/logo.png') }}" style="width: 70px; height: 80px;">
+                  <img src="{{ asset('assets/logo.png') }}" style="width: 170px">
                   {{-- <span class="app-brand-text demo text-body fw-bolder">Sneat</span> --}}
                 </a>
               </div>
               <!-- /Logo -->
-              <h4 class="mb-2">Welcome to Sneat! 👋</h4>
+              <h4 class="mb-2">Welcome to Help Desk! 👋</h4>
               <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
               <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
@@ -139,15 +139,6 @@
     </div>
 
     <!-- / Content -->
-
-    <div class="buy-now">
-      <a
-        href="https://SMB TICKET.com/products/sneat-bootstrap-html-admin-template/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
-    </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
