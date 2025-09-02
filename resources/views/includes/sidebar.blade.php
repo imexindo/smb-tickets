@@ -24,8 +24,17 @@
         <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <div data-i18n="Analytics">
-                  <i class="fa fa-home" style="padding-right: 10px"></i> 
+                  <i class="fa fa-chart-bar" style="padding-right: 10px"></i> 
                   Dashboard
+                </div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('ticket.index') ? 'active' : '' }}">
+            <a href="{{ route('ticket.index') }}" class="menu-link">
+                <div data-i18n="Analytics">
+                  <i class="fa fa-folder-open" style="padding-right: 10px"></i> 
+                  Ticket
                 </div>
             </a>
         </li>

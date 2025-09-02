@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-<title>Roles | SMB Claims</title>
+<title>Roles | SMB Help Desk</title>
 
 
 @section('content')

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-<title>User's | SMB Ticket's</title>
+<title>User's | SMB Help Desk</title>
 
 
 

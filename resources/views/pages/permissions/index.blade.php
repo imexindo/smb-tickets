@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-<title>Permission's | SMB Ticket's</title>
+<title>Permission's | SMB Help Desk</title>
 
 
 @section('content')

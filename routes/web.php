@@ -7,6 +7,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,13 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
             Route::delete('/destroy/{id}', [DepartementController::class, 'destroy'])->name('departements.destroy');
         });
         
+    });
+
+    Route::prefix('transaction')->group(function () {
+        Route::middleware(['permission:ticket_access'])->group(function () {
+            Route::get('/ticket', [TicketsController::class, 'index'])->name('ticket.index');
+            Route::post('/ticket/store', [TicketsController::class, 'store'])->name('ticket.store');
+        });
     });
 
 

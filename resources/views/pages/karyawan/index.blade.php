@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-<title>Employees | SMB Ticket's</title>
+<title>Employees | SMB Help Desk</title>
 
 @section('content')
     <div class="card">

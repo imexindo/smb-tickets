@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-<title>Group's | SMB Claims </title>
+<title>Group's | SMB Help Desk </title>
 
 @include('includes.dt-css')
 
