@@ -1,7 +1,7 @@
 <style>
-.layout-navbar {
-  z-index: 1 !important;
-}
+    .layout-navbar {
+        z-index: 1 !important;
+    }
 </style>
 
 
@@ -18,6 +18,65 @@
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
+            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside" aria-expanded="false">
+                    <span class="position-relative">
+                        <i class="icon-base bx bx-bell icon-md"></i>
+                        <span class="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end p-0">
+                    <li class="dropdown-menu-header border-bottom">
+                        <div class="dropdown-header d-flex align-items-center py-3">
+                            <h6 class="mb-0 me-auto">Notification</h6>
+                            <div class="d-flex align-items-center h6 mb-0">
+                                <span class="badge bg-label-primary me-2">1 New</span>
+                                <a href="javascript:void(0)" class="dropdown-notifications-all p-2"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark all as read"
+                                    data-bs-original-title="Mark all as read"><i
+                                        class="icon-base bx bx-envelope-open text-heading"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown-notifications-list scrollable-container ps">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar">
+                                            <img src="{{ asset('sneat/assets/img/avatars/1.png') }}" alt="" class="rounded-circle">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="small mb-0">Congratulation Lettie 🎉</h6>
+                                        <small class="mb-1 d-block text-body">Won the monthly best seller gold
+                                            badge</small>
+                                        <small class="text-body-secondary">1h ago</small>
+                                    </div>
+                                    <div class="flex-shrink-0 dropdown-notifications-actions">
+                                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                                class="badge badge-dot"></span></a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                        </div>
+                        <div class="ps__rail-y" style="top: 0px; right: 0px;">
+                            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                        </div>
+                    </li>
+                    <li class="border-top">
+                        <div class="d-grid p-4">
+                            <a class="btn btn-primary btn-sm d-flex" href="javascript:void(0);">
+                                <small class="align-middle">View all notifications</small>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
 
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -72,6 +131,7 @@
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>
+
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

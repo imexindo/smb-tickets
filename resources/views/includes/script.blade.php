@@ -26,3 +26,4 @@
 
 <!-- SweetAlert (opsional, buat delete confirmasi) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/vendor/js/helpers.js"></script>

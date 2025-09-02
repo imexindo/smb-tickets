@@ -1,19 +1,24 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu"
+    style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
 
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand demo">
-        <a href="/admin/dashboard" class="app-brand-link">
+    <div class="app-brand demo ">
+        <a href="{{ route('dashboard') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('assets/logo.png') }}" alt="" srcset="" width="150px">
+                <span class="text-primary">
+                    <img src="{{ asset('assets/logo.png') }}" style="width: 170px">
+                </span>
             </span>
-            {{-- <span class="app-brand-text demo menu-text fw-bolder ms-2">SMB TICKET</span> --}}
+            {{-- <span class="app-brand-text demo menu-text fw-bold ms-2">Sneat</span> --}}
         </a>
 
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="icon-base bx bx-chevron-left"></i>
         </a>
     </div>
 
     <div class="menu-inner-shadow"></div>
+
+
 
     <ul class="menu-inner py-1">
 
@@ -24,8 +29,8 @@
         <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <div data-i18n="Analytics">
-                  <i class="fa fa-chart-bar" style="padding-right: 10px"></i> 
-                  Dashboard
+                    <i class="menu-icon icon-base bx bx-home-smile"></i>
+                    Dashboard
                 </div>
             </a>
         </li>
@@ -33,8 +38,8 @@
         <li class="menu-item {{ request()->routeIs('ticket.index') ? 'active' : '' }}">
             <a href="{{ route('ticket.index') }}" class="menu-link">
                 <div data-i18n="Analytics">
-                  <i class="fa fa-folder-open" style="padding-right: 10px"></i> 
-                  Ticket
+                    <i class="menu-icon icon-base bx bx-box"></i>
+                    Ticket
                 </div>
             </a>
         </li>
@@ -94,4 +99,6 @@
             </a>
         </li>
     </ul>
+
+
 </aside>

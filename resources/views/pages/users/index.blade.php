@@ -10,8 +10,8 @@
             <h5 class="card-title">Users</h5>
         </div>
         <div class="card-body">
-            <table class="table table-striped table-hover table-borderless align-middle" id="dom-jqry">
-                <thead class="table-light">
+            <table id="dom-jqry" class="table table-striped nowrap" style="width:100%">
+                <thead >
                     <tr>
                         <th class="text-center">#</th>
                         <th>Name</th>

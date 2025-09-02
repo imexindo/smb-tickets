@@ -28,3 +28,7 @@
 <!-- Helpers -->
 <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
 <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
+<link rel="stylesheet" href="https://a.omappapi.com/app/js/api.min.css">
+<link rel="stylesheet" href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/vendor/css/core.css">
+<link rel="stylesheet" href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/css/demo.css">
+
