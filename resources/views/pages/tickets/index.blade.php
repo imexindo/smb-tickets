@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 <title>Ticket | SMB Help Desk</title>
+
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -33,11 +34,15 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
                                         <button class="btn btn-primary btn-sm">
                                             <i class="fa fa-eye"></i> View
                                         </button>
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fa fa-pen"></i> Update
+                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modalUpdate">
+                                            <i class="fa fa-edit"></i> Process
                                         </button>
                                     </td>
                                     <td>
@@ -46,8 +51,10 @@
                                             {{ $item->latestHistory ? $item->latestHistory->status->name : '-' }}
                                         </span>
                                     </td>
-                                    <td style="font-size: 16px; font-weight: bold; color: rgb(25, 66, 200)">{{ $item->no }}</td>
-                                    <td style="font-size: 14px; font-weight: bold; color: rgb(23, 23, 23)">{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
+                                    <td style="font-size: 16px; font-weight: bold; color: rgb(25, 66, 200)">
+                                        {{ $item->no }}</td>
+                                    <td style="font-size: 14px; font-weight: bold; color: rgb(23, 23, 23)">
+                                        {{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
                                     <td>
                                         <span class="badge bg-success">
                                             <i class="fa fa-check-circle"></i>
@@ -136,12 +143,11 @@
                                             pdf, docx, png, jpg, jpeg, xlsx, csv, zip
                                         </span>
                                     </label>
-                                    <div id="drop-area"
-                                        class="border border-2 border-dashed rounded p-4 text-center bg-light"
+                                    <div id="drop-area" class="border border-2 border-dashed rounded p-5 text-center"
                                         style="cursor: pointer;">
                                         <p class="mb-2">Drag & Drop file di sini atau klik untuk pilih</p>
                                         <input type="file" id="fileElem" name="attachments[]" multiple hidden
-                                            accept=".pdf,.docx,.png,.jpg,.jpeg,.xlsx,.csv,.zip">
+                                            accept=".pdf,.docx,.png,.jpg,.jpeg,.xlsx,.csv,.zip,.rar">
                                     </div>
                                     <div id="file-list" class="mt-2"></div>
                                 </div>
@@ -163,30 +169,108 @@
         </div>
     </div>
 
-    <!-- Modal Add/Edit -->
-    <div class="modal fade" id="modalAddEdit" tabindex="-1" aria-labelledby="modalAddEditLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="formTicket" method="post">
-                @csrf
-                <input type="hidden" name="id" id="karyawan_id">
+    <!-- Modal View-->
+    <div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUpdateLabel">Process</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="">No</label>
+                                <input type="text" class="form-control" aria-describedby="helpId" readonly>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="">Request</label>
+                                <input type="text" class="form-control" aria-describedby="helpId" readonly>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="">Date</label>
+                                <input type="text" class="form-control" aria-describedby="helpId" readonly>
+                            </div>
+                        </div>
+                        <div class="col-8 mt-2">
+                            <div class="form-group">
+                                <label for="category_id">Category</label>
+                                <select class="form-control" name="category_id" id="category_id"
+                                    id="category_id_history">
+                                    @foreach ($categories as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->type == 0 ? 'APLIKASI' : 'SOFTWARE' }} - {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <div class="form-group">
+                                <label for="">Departement</label>
+                                <input type="text" class="form-control" aria-describedby="helpId" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="form-group">
+                                <label for="desc">Descriptions</label>
+                                <textarea class="form-control" name="desc" id="desc_history" rows="3"></textarea>
+                            </div>
+                        </div>
 
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalAddEditLabel">Edit Employee</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group mt-2">
-                            <label for="nik">NIK</label>
-                            <input type="text" class="form-control" name="nik" id="nik_edit" required readonly>
+                        <div class="col-8 mt-2">
+                            <div class="form-group">
+                                <label for="status_edit_history">Next Action</label>
+                                <select class="form-control" name="status_id" id="status_edit_history">
+                                    <option></option>
+                                    <option></option>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <div class="form-group">
+                                <label for="date_history">Process Date</label>
+                                <input type="date" class="form-control" name="date" id="date_history"
+                                    aria-describedby="helpId">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-12 mt-3 mb-1">
+                                <div class="form-group">
+                                    <label for="upload_by_req">File Attachment IT
+                                        <span style="font-weight: bold; color: rgb(159, 11, 11); font-style: italic;">
+                                            pdf, docx, png, jpg, jpeg, xlsx, csv, zip
+                                        </span>
+                                    </label>
+                                    <div id="drop-area" class="border border-2 border-dashed rounded p-5 text-center"
+                                        style="cursor: pointer;">
+                                        <p class="mb-2">Drag & Drop file di sini atau klik untuk pilih</p>
+                                        <input type="file" id="fileElem" name="attachments[]" multiple hidden
+                                            accept=".pdf,.docx,.png,.jpg,.jpeg,.xlsx,.csv,.zip,.rar">
+                                    </div>
+                                    <div id="file-list" class="mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="form-group">
+                                <label for="remark_history">Remark</label>
+                                <textarea class="form-control" name="remark" id="remark_history" rows="3"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-                    </div>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -306,7 +390,7 @@
                         "d-flex justify-content-between align-items-center border p-2 mb-2 rounded bg-white shadow-sm";
 
                     item.innerHTML = `
-                    <span>${file.name} <small class="text-muted">(${(file.size / 20480).toFixed(1)} KB)</small></span>
+                    <span>${file.name} <small class="text-muted">(${(file.size / 1024).toFixed(1)} KB)</small></span>
                     <button type="button" class="btn btn-sm btn-danger ms-2" data-index="${index}">CANCEL</button>
                 `;
 

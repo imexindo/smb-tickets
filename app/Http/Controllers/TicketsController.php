@@ -9,6 +9,7 @@ use App\Models\Tickets;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TicketsController extends Controller
 {
@@ -28,13 +29,12 @@ class TicketsController extends Controller
 
     public function store(Request $request)
     {
-
         try {
 
             $request->validate([
                 'date' => 'required|date',
                 'category_id' => 'required',
-                'attachments.*' => 'file|mimes:pdf,docx,png,jpg,jpeg,xlsx,csv,zip|max:20480' // 20MB
+                'attachments.*' => 'file|mimetypes:application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-rar-compressed,image/png,image/jpeg,text/csv,application/octet-stream|max:51200'
             ]);
 
             // ====== Generate Ticket Number ======
@@ -82,7 +82,37 @@ class TicketsController extends Controller
 
             return redirect()->back()->with('success', 'Ticket created successfully.');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Failed to create ticket: ' . $th->getMessage());
+            Log::error('Ticket creation failed', [
+                'error_message' => $th->getMessage(),
+                'error_file' => $th->getFile(),
+                'error_line' => $th->getLine(),
+                'stack_trace' => $th->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+            return redirect()->back()->with('error', 'Failed to create ticket. Please check logs.' . $th->getMessage());
+        }
+    }
+
+    public function getData($id)
+    {
+        try {
+            $ticket = Tickets::with([
+                'category:id,name',
+                'user:id,name',
+                'latestHistory.status:id,name,name_by_req,name_by_recv,bg_color'
+            ])
+                ->orderBy('created_at', 'desc')
+                ->find($id);
+
+            return response()->json([
+                'data' => $ticket,
+                'message' => 'Successfully'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response([
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

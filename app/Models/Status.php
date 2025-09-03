@@ -11,5 +11,5 @@ class Status extends Model
 
     protected $table = 'm_status';
 
-    protected $fillable = ['name', 'name_by_req', 'name_by_recv','next_action'];
+    protected $fillable = ['name', 'name_by_req', 'name_by_recv','next_action', 'bg_color'];
 }
