@@ -25,7 +25,7 @@
                                 <th>Category</th>
                                 <th>Request By</th>
                                 <th>Role</th>
-                                <th>Dep</th>
+                                <th>Departement</th>
                                 <th>Created</th>
                             </tr>
                         </thead>
@@ -37,16 +37,18 @@
                                         <button class="btn btn-danger btn-sm">
                                             <i class="fa fa-trash"></i> Delete
                                         </button>
-                                        <button class="btn btn-primary btn-sm">
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modalView" data-id="{{ Crypt::encrypt($item->id) }}">
                                             <i class="fa fa-eye"></i> View
                                         </button>
+
                                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#modalUpdate">
+                                            data-bs-target="#modalUpdate" data-id="{{ Crypt::encrypt($item->id) }}">
                                             <i class="fa fa-edit"></i> Process
                                         </button>
                                     </td>
                                     <td>
-                                        <span class="badge bg-success">
+                                        <span class="badge {{ $item->latestHistory->status->bg_color }}">
                                             <i class="fa fa-check-circle"></i>
                                             {{ $item->latestHistory ? $item->latestHistory->status->name : '-' }}
                                         </span>
@@ -57,7 +59,7 @@
                                         {{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
                                     <td>
                                         <span class="badge bg-success">
-                                            <i class="fa fa-check-circle"></i>
+                                            <i class="fa fa-newspaper"></i>
                                             {{ $item->category ? $item->category->name : '-' }}
                                         </span>
                                     </td>
@@ -84,7 +86,7 @@
                                             {{ $item->user ? $item->user->groupuser->department->name : '-' }}
                                         </span>
                                     </td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td style="color: black">{{ $item->created_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -169,7 +171,7 @@
         </div>
     </div>
 
-    <!-- Modal View-->
+    <!-- Modal Process-->
     <div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="modalUpdateLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -228,8 +230,6 @@
                                 <label for="status_edit_history">Next Action</label>
                                 <select class="form-control" name="status_id" id="status_edit_history">
                                     <option></option>
-                                    <option></option>
-                                    <option></option>
                                 </select>
                             </div>
                         </div>
@@ -268,7 +268,57 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-save"></i>&nbsp;Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal View-->
+    <div class="modal fade" id="modalView" tabindex="-1" aria-labelledby="modalViewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalViewLabel">View</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive-lg">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="bg-primary">
+                                            <th scope="col" class="text-white">No</th>
+                                            <th scope="col" class="text-white">Date</th>
+                                            <th scope="col" class="text-white">Category</th>
+                                            <th scope="col" class="text-white">Attachment User</th>
+                                            <th scope="col" class="text-white">Attachment IT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-striped table-inverse table-responsive">
+                                    <thead class="thead-inverse">
+                                        <tr class="bg-secondary">
+                                            <th class="text-white">No</th>
+                                            <th class="text-white">Date</th>
+                                            <th class="text-white">Status</th>
+                                            <th class="text-white">Remark</th>
+                                            <th class="text-white">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -278,6 +328,7 @@
 
     <script>
         $(document).ready(function() {
+            // table
             $('#dom-jqry').DataTable({
                 scrollX: true,
                 columnDefs: [{
@@ -323,8 +374,215 @@
                 ],
                 fixedColumns: true
             });
+
+            function formatDateTime(datetime) {
+                if (!datetime) return '-';
+                let d = new Date(datetime);
+                if (isNaN(d.getTime())) return datetime;
+                let day = String(d.getDate()).padStart(2, '0');
+                let month = String(d.getMonth() + 1).padStart(2, '0');
+                let year = d.getFullYear();
+                let hours = String(d.getHours()).padStart(2, '0');
+                let mins = String(d.getMinutes()).padStart(2, '0');
+                return `${day}/${month}/${year} ${hours}:${mins}`;
+            }
+
+            function formatDate(datetime) {
+                if (!datetime) return '-';
+                let d = new Date(datetime);
+                if (isNaN(d.getTime())) return datetime;
+                let day = String(d.getDate()).padStart(2, '0');
+                let month = String(d.getMonth() + 1).padStart(2, '0');
+                let year = d.getFullYear();
+                let hours = String(d.getHours()).padStart(2, '0');
+                let mins = String(d.getMinutes()).padStart(2, '0');
+                return `${day}/${month}/${year}`;
+            }
+
+            // View
+            $(document).on("click", ".btn[data-bs-target='#modalView']", function() {
+                let id = $(this).data("id"); // ambil data-id dari tombol
+                let url = "{{ route('ticket.get-data', ':id') }}".replace(':id', id);
+
+                // kosongkan isi table dulu
+                $("#modalView table tbody").html(`
+                    <tr>
+                        <td colspan="5" class="text-center">Loading...</td>
+                    </tr>
+                `);
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function(res) {
+                        if (res.data) {
+                            let ticket = res.data;
+
+                            // === handle attachment user & IT ===
+                            let attachmentUser = '-';
+                            let attachmentIT = '-';
+
+                            if (ticket.attachments && ticket.attachments.length > 0) {
+                                let userLinks = [];
+                                let itLinks = [];
+
+                                ticket.attachments.forEach(att => {
+                                    let fileUrl = `/storage/${att.path}`;
+                                    let isImage = /\.(jpg|jpeg|png|gif)$/i.test(att
+                                        .path);
+
+                                    let preview = isImage ?
+                                        `<br><img src="${fileUrl}" class="img-thumbnail mt-1" style="max-height:120px;">` :
+                                        '';
+
+                                    if (att.request_id) {
+                                        userLinks.push(`<a href="${fileUrl}" target="_blank" class="btn btn-sm btn-success mb-1">
+                                    <i class="fa fa-eye"></i> View
+                                </a>`);
+                                    }
+                                    if (att.approve_id) {
+                                        itLinks.push(`<a href="${fileUrl}" target="_blank" class="btn btn-sm btn-success mb-1">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>`);
+                                    }
+                                });
+
+                                if (userLinks.length > 0) attachmentUser = userLinks.join(
+                                    '<br>');
+                                if (itLinks.length > 0) attachmentIT = itLinks.join('<br>');
+                            }
+
+                            // === isi table pertama (detail ticket) ===
+                            let detailHtml = `
+                                <tr>
+                                    <td>1</td>
+                                    <td style="font-weight: bold">${ticket.date ?? '-'}</td>
+                                    <td style="font-weight: bold">${ticket.category?.name ?? '-'}</td>
+                                    <td>${attachmentUser}</td>
+                                    <td>${attachmentIT}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" class="bg-primary text-white">DESCRIPTIONS</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">${ticket.desc ?? '-'}</td>
+                                </tr>
+                            `;
+                            $("#modalView table").eq(0).find("tbody").html(detailHtml);
+
+                            // === isi table kedua (history) ===
+                            let historyHtml = "";
+                            ticket.history.forEach((item, i) => {
+                                historyHtml += `
+                                    <tr>
+                                        <td>${i + 1}</td>
+                                        <td>${formatDate(item.date)}</td>
+                                        <td class="${item.status ?? ''}">
+                                            <span class="badge ${item.bg_color ?? ''}">${item.status?.name ?? '-'}</span>
+                                        </td>
+                                        <td>${item.remark ?? '-'}</td>
+                                        <td>${formatDateTime(item.created_at)}</td>
+
+                                    </tr>
+                                `;
+                            });
+
+                            if (historyHtml === "") {
+                                historyHtml = `
+                            <tr>
+                                <td colspan="5" class="text-center">No history</td>
+                            </tr>
+                        `;
+                            }
+
+                            $("#modalView table").eq(1).find("tbody").html(historyHtml);
+
+                        } else {
+                            $("#modalView table tbody").html(`
+                        <tr><td colspan="5" class="text-center">Data not found</td></tr>
+                    `);
+                        }
+                    },
+                    error: function(xhr) {
+                        $("#modalView table tbody").html(`
+                    <tr><td colspan="5" class="text-danger text-center">Error load data</td></tr>
+                `);
+                    }
+                });
+            });
+
+
+            // Update
+            $(document).on("click", ".btn[data-bs-target='#modalUpdate']", function() {
+                let id = $(this).data("id");
+                let url = "{{ route('ticket.edit-data', ':id') }}".replace(':id', id);
+
+                // simpan id ke hidden input
+                $("#modalUpdate input[name='ticket_id']").val(id);
+
+                $.get(url, function(res) {
+                    if (res.data) {
+                        let t = res.data;
+                        $("#modalUpdate input[aria-describedby='helpId']").eq(0).val(t.no);
+                        $("#modalUpdate input[aria-describedby='helpId']").eq(1).val(t.user?.name ??
+                            '-');
+                        $("#modalUpdate input[aria-describedby='helpId']").eq(2).val(t.date);
+                        $("#modalUpdate #category_id").val(t.category_id);
+                        $("#modalUpdate textarea#desc_history").val(t.desc);
+
+                        // gunakan latestHistory (camelCase)
+                        $("#modalUpdate input#date_history").val(t.latestHistory?.date ?? '');
+                        $("#modalUpdate textarea#remark_history").val('');
+
+                        // departement
+                        $("#modalUpdate input[aria-describedby='helpId']").eq(3).val(
+                            t.user?.groupuser?.department?.name ?? '-'
+                        );
+                    }
+                });
+            });
+
+            // === submit form update ===
+            $("#modalUpdate .btn-primary").on("click", function() {
+                let id = $("#modalUpdate input[name='ticket_id']").val();
+                let url = "{{ route('ticket.update-data', ':id') }}".replace(':id', id);
+
+                let formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("_method", "PUT");
+                formData.append("date", $("#date_history").val());
+                formData.append("category_id", $("#category_id").val());
+                formData.append("status_id", $("#status_edit_history").val());
+                formData.append("desc", $("#desc_history").val());
+                formData.append("remark", $("#remark_history").val());
+
+                let files = $("#fileElem")[0].files;
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("attachments[]", files[i]);
+                }
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        alert(res.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert("Update failed: " + (xhr.responseJSON?.message ??
+                            "Unknown error"));
+                    }
+                });
+            });
+
+
+
         });
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

@@ -34,4 +34,9 @@ class Tickets extends Model
             ->latestOfMany()
             ->select('history.id', 'history.ticket_id', 'history.date', 'history.status_id', 'history.remark', 'history.user_id');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachments::class, 'ticket_id');
+    }
 }

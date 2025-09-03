@@ -59,6 +59,8 @@ Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['permission:ticket_access'])->group(function () {
             Route::get('/ticket', [TicketsController::class, 'index'])->name('ticket.index');
             Route::post('/ticket/store', [TicketsController::class, 'store'])->name('ticket.store');
+            Route::get('/ticket/edit/{id}', [TicketsController::class, 'edit'])->name('ticket.edit-data');
+            Route::post('/ticket/update/{id}', [TicketsController::class, 'update'])->name('ticket.update-data');
             Route::get('/ticket/get/{id}', [TicketsController::class, 'getData'])->name('ticket.get-data');
         });
     });
